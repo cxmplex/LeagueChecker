@@ -6,7 +6,6 @@ import json
 import time
 import random
 
-
 result_list = open("results.txt", "a")
 result_stats = {'hits': 0, 'failures': 0, 'retries': 0}
 retries = []
@@ -15,7 +14,7 @@ functions = 'removed_for_safety'
 
 
 async def check_account(entry, data):
-    async with aioboto3.client('lambda', region_name='us-east-2') as client:
+    async with aioboto3.client('lambda', region_name=random.choice(functions).split(':')[3]) as client:
         failure = True
         tries = 0
         max_tries = 10
@@ -61,8 +60,6 @@ async def check_account(entry, data):
         elif 'invalid_credentials' in token_response:
             result_stats['retries'] += 1
 
-        # clear console
-
 
 async def runner():
     print("Creator: Github.com/cxmplex")
@@ -72,6 +69,7 @@ async def runner():
             loop.create_task(check_account(entry, entry.split(':')))
             print("Hits: {} Failures: {} Retries: {}"
                   .format(result_stats['hits'], result_stats['failures'], result_stats['retries']))
+
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(runner())
