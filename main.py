@@ -56,10 +56,9 @@ async def check_account(entry, data):
             result_list.write("{}\n".format(entry))
             result_stats['hits'] += 1
         elif 'Access denied' in token_response:
-            result_stats['failures'] += 1
-        elif 'invalid_credentials' in token_response:
             result_stats['retries'] += 1
-
+        elif 'invalid_credentials' in token_response:
+            result_stats['failures'] += 1
 
 async def runner():
     print("Creator: Github.com/cxmplex")
